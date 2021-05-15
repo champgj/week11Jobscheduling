@@ -25,7 +25,7 @@ class JobScheduling {
         }
 
         int max = machine[0];
-        for(int i =0; i<machine.length;i++){
+        for(int i =0; i<m;i++){
             if(max < machine[i]){
                 max = machine[i];
             }
@@ -46,9 +46,23 @@ class JobScheduling {
     }
 
 
-    public static void bruteforce(int machineNum,int [] task){ // 브루트포스
+    public static int bruteforce(int []machine, int [] task){ // 브루트포스 그냥 기계 대수에 나눠서 작업 분배
+        int m = machine.length;
+        int n = task.length;
 
+        for(int i = 0; i<n;i++){
+            machine[i%m] += task[i];
+        }
 
+        int max = machine[0];
+        for(int i =0; i<m;i++){
+            if(max < machine[i]){
+                max = machine[i];
+            }
+
+        }
+
+        return max; // 제일 오래걸리는 기계의 종료시간을 반환
     }
 
 
@@ -73,8 +87,15 @@ class JobScheduling {
             System.out.print(task[i]+" ");
         }
         System.out.println("");
-        System.out.println("최종 걸리는 시간은 "+JobScheduling(machine,task)+"초 입니다.");
+        System.out.println("greedy로 구현시 최종 걸리는 시간은 "+JobScheduling(machine,task)+"초 입니다.");
 
+        for(int i = 0; i<machine.length;i++){ // machine 배열(종료시간 저장배열)에
+                                                // 기존 greedy로 구현해서 저장된 값들을 다시 0으로 초기화해준다.
+            machine[i] = 0;
+        }
+
+        System.out.println("");
+        System.out.println("bruteforce로 구현시 최종 걸리는 시간은 "+bruteforce(machine,task)+"초 입니다.");
 
 
 
