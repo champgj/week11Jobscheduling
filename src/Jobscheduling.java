@@ -65,9 +65,9 @@ class JobScheduling {
                 machine[p] += task[k];  // task길이를 기계의 종료시간에 추가연장해준다.
             }
 
-            for (int l = 0; l < m; l++) {// 각 경우에서 가장 느렸던 종료시간을 lastarr배열에 저장하는 과정
+            for (int l = 0; l < m; l++) {// 각 경우에서 가장 느렸던 종료시간을 fintimearr배열에 저장하는 과정
                 if (machine[l] > fintimearr[i]) { //만약 더 크면->더 느리면
-                    fintimearr[i] = machine[l];  // 그 값을 last arr에 저장
+                    fintimearr[i] = machine[l];  // 그 값을 fintimearr에 저장
                 }
             }
 
