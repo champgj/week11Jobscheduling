@@ -292,7 +292,7 @@ public static void main(String[] arg){
 
 이것에 대해서는 밑에서 다시 다루겠습니다.
 
-### 2.2.6) 정렬전체
+### 2.2.6) 전체코드
 
 ```java
 // 전에 짰던 JobScheduling은 시작시간과 종료시간이 정해져있어서 시간상에서
