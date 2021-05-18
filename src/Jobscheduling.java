@@ -5,7 +5,7 @@
 import java.util.Scanner;
 
 class JobScheduling {
-    public static int JobScheduling(int [] machine, int [] task) {
+    public static int Greedy(int [] machine, int [] task) {
         int m = machine.length; // 기계대수 2를 m에 넣어둔다.
         int n = task.length; //task의 개수를 n에 넣어둔다.
         int min = 0; //min 선언
@@ -138,7 +138,7 @@ class JobScheduling {
         }
         System.out.println("");
         System.out.println("");
-        System.out.println("greedy로 구현시 최종 걸리는 시간은 "+JobScheduling(machine,task)+"초 입니다.");
+        System.out.println("greedy로 구현시 최종 걸리는 시간은 "+Greedy(machine,task)+"초 입니다.");
 
        for(int i = 0; i<machine.length;i++){
            machine[i]=0;
