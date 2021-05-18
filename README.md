@@ -223,7 +223,8 @@ public static int[][] alltaskmachineNum(int[] machine, int[] task) {
  ```
 
 1. alltaskmachineNum 는 기계에 매치될 수 있는 모든 경우의 수를 구하는 함수 이다.
-2. 
+2. task의 개수 = 몇자리인지, machine의 개수 = 몇 진법 인지 로 생각하면 이해가 쉽다.
+3. 자리수가 올라갈 때 그 윗자리가 1이 추가 되고 아랫자리는 다시 0이 되는 것처럼 구현하였다.
 
 
 
@@ -236,8 +237,8 @@ public static void main(String[] arg){
 
         System.out.print("입력의 개수와 기계대수를 입력하세요>");
         Scanner scanner = new Scanner(System.in);
-        int totaltask = scanner.nextInt();
-        int totalmachine = scanner.nextInt();
+        int totaltask = scanner.nextInt();      //16;넣어서 테스트완료
+        int totalmachine = scanner.nextInt();   //2;넣어서 테스트완료
 
         int task[] = new int[totaltask];
         randomtask(task); //이렇게 하면 task배열의 값들이 모두 랜덤으로 설정된다.
@@ -261,6 +262,27 @@ public static void main(String[] arg){
 
         System.out.println("");
         System.out.println("bruteforce로 구현시 최종 걸리는 시간은 "+bruteforce(task,machine)+"초 입니다.");
+
+/*      각 경우의 근사도를 알아내는 코드!
+        double sum=0;
+        for(int i = 0; i < 100; i++){
+            for (int j = 0; j < machine.length; j++) {// 한번 루프가 돌았다면 machine에 이전 작업결과들이 남아있을테니 다시 0으로 모두 초기화해준다.
+                machine[j] = 0;
+            }
+            randomtask(task);
+            double greedysol = Greedy(machine,task);
+            double brutesol = bruteforce(task,machine);
+
+            double rate = greedysol / brutesol;
+            sum += rate;
+        }
+
+        System.out.println(sum/100);
+
+
+
+ */
+
     }
  ```
 
@@ -280,7 +302,7 @@ public static void main(String[] arg){
 import java.util.Scanner;
 
 class JobScheduling {
-    public static int JobScheduling(int [] machine, int [] task) {
+    public static int Greedy(int [] machine, int [] task) {
         int m = machine.length; // 기계대수 2를 m에 넣어둔다.
         int n = task.length; //task의 개수를 n에 넣어둔다.
         int min = 0; //min 선언
@@ -340,9 +362,9 @@ class JobScheduling {
                 machine[p] += task[k];  // task길이를 기계의 종료시간에 추가연장해준다.
             }
 
-            for (int l = 0; l < m; l++) {// 각 경우에서 가장 느렸던 종료시간을 lastarr배열에 저장하는 과정
+            for (int l = 0; l < m; l++) {// 각 경우에서 가장 느렸던 종료시간을 fintimearr배열에 저장하는 과정
                 if (machine[l] > fintimearr[i]) { //만약 더 크면->더 느리면
-                    fintimearr[i] = machine[l];  // 그 값을 last arr에 저장
+                    fintimearr[i] = machine[l];  // 그 값을 fintimearr에 저장
                 }
             }
 
@@ -396,8 +418,8 @@ class JobScheduling {
 
         System.out.print("입력의 개수와 기계대수를 입력하세요>");
         Scanner scanner = new Scanner(System.in);
-        int totaltask = scanner.nextInt();
-        int totalmachine = scanner.nextInt();
+        int totaltask = scanner.nextInt();      //16;넣어서 테스트완료
+        int totalmachine = scanner.nextInt();   //2;넣어서 테스트완료
 
         int task[] = new int[totaltask];
         randomtask(task); //이렇게 하면 task배열의 값들이 모두 랜덤으로 설정된다.
@@ -413,7 +435,7 @@ class JobScheduling {
         }
         System.out.println("");
         System.out.println("");
-        System.out.println("greedy로 구현시 최종 걸리는 시간은 "+JobScheduling(machine,task)+"초 입니다.");
+        System.out.println("greedy로 구현시 최종 걸리는 시간은 "+Greedy(machine,task)+"초 입니다.");
 
        for(int i = 0; i<machine.length;i++){
            machine[i]=0;
@@ -421,7 +443,25 @@ class JobScheduling {
 
         System.out.println("");
         System.out.println("bruteforce로 구현시 최종 걸리는 시간은 "+bruteforce(task,machine)+"초 입니다.");
+
+/*      각 경우의 근사도를 알아내는 코드!
+        double sum=0;
+        for(int i = 0; i < 100; i++){
+            for (int j = 0; j < machine.length; j++) {// 한번 루프가 돌았다면 machine에 이전 작업결과들이 남아있을테니 다시 0으로 모두 초기화해준다.
+                machine[j] = 0;
+            }
+            randomtask(task);
+            double greedysol = Greedy(machine,task);
+            double brutesol = bruteforce(task,machine);
+
+            double rate = greedysol / brutesol;
+            sum += rate;
+        }
+
+        System.out.println(sum/100);
+ */
     }
+
 }
 ```
 
@@ -431,82 +471,90 @@ class JobScheduling {
 
 ### 2.5) 출력결과
 
+![123](C:\Users\Choi\Desktop\INU\2-1\컴퓨터알고리즘-김동훈\11주차\123.png)
 
 
-을 나타낸다.
+
+bruteforce는 모든 경우의 수를 찾아보기 때문에 bruteforce가 더 빠를 수 밖에 없다.
+
+하지만 greedy방법에서의 연산횟수가 훨씬 적다.
 
 
 
 # 3. 성능비교
 
-## 3.1) 각 정렬별 장단점
+## 3.1) 근사 비율
+
+```java
+double sum=0;
+for(int i = 0; i < 100; i++){
+    for (int j = 0; j < machine.length; j++) {
+        machine[j] = 0;
+    }
+    randomtask(task);
+    double greedysol = Greedy(machine,task);
+    double brutesol = bruteforce(task,machine);
+
+    double rate = greedysol / brutesol;
+    sum += rate;
+}
+
+System.out.println(sum/100);
+```
+
+메인함수 맨 뒷 부분에 코드를 추가해서
+
+각각의 그리디/브루트포스 의 비율을 100회실행한 평균을 구해보았다.
 
 
 
+|      | 4        | 8        | 10       | 12       | 14      | 16       |
+| ---- | -------- | -------- | -------- | -------- | ------- | -------- |
+| 2    | 1.092778 | 1.064187 | 1.048966 | 1.045064 | 1.04035 | 1.032923 |
+| 4    | 1        | 1.171698 | 1.166431 | 초과     | 초과    | 초과     |
+| 8    | x        | 1        | 초과     | 초과     | 초과    | 초과     |
 
+표의 맨 윗 행은 작업의 개수, 맨 왼쪽 열은 기계의 대수를 나타낸다. 
 
-## 3.2) 각 데이터별 정렬의 시간복잡도
+작업의 개수가 많으면 많아질수록 점점 더 근사도가 올라간다는 것을 볼 수 있다.
 
+또한 기계의 개수가 조금이라도 늘어나거나 작업의 개수가 늘어나면 메모리초과오류가 발생하기 때문에
 
+이러한 문제를 해결할 때는 브루트포스방법 보다는 근사알고리즘을 사용하도록 해야겠다.
 
+Approx Jobsheduling에서의 근사비율 
 
+근사해는 OPT', 최적해는 OPT 이다.
 
-## 3.3) 각 데이터 별 성능비교
+OPT' <= 2 x OPT 이다. (근사해는 최적해의 2배를 넘지 않는다.)
 
-### 3.3.1) 정렬별 시간복잡도
-
-각 정렬의 특성을 파악해보자면,
-
-1. 삽입정렬에서 내림차순>랜덤>어느정도 순이고, 어느정도 정렬된 배열에서는 속도가 빨랐다.
-
-2. 버블정렬에서는 내림차순>랜덤>어느정도 순이고, 전체적으로 속도가 느리지만 어느정도 정렬된 배열을 정렬했을때 그나마 속도가 빨랐다.
-3. 선택정렬에서는 내림차순>랜덤>어느정도 순이고, 전체적으로 세가지 타입의 속도가 비슷했다.
-4. 쉘정렬의 시간복잡도가 그래프상에서는 이상해보이지만 수치 상 거의 일정하게 빠른 속도를 보여주고 있다.
-
-
-
-### 3.3.2) 데이터종류별 시간복잡도
-
-
-
-모든 데이터 타입에서 쉘정렬이 우세했다.
-
-1. 랜덤배열에서는 버블정렬>선택정렬>삽입정렬>쉘정렬 순이고 버블정렬의 속도가 제일 느렸다.
-
-2. 어느정도 정렬된 배열에서는 선택정렬>버블정렬>삽입정렬,쉘정렬 순이고 삽입정렬은 이 어느정도 정렬된 배열에서 조금 좋은 성능을 낼 수 있다. 다만 버블정렬과 선택정렬은 매우 느린 결과를 볼 수 있다.
-3. 내림차순 배열에서는 버블정렬>선택정렬>삽입정렬>쉘정렬 순이다.
+![image-20210519022134695](C:\Users\Choi\AppData\Roaming\Typora\typora-user-images\image-20210519022134695.png)
 
 
 
-### 3.3.3) 전체 시간복잡도
+자료출처 : ppt
 
 
 
-같은 정렬방식이라도 코드로 짜는 방법의 차이로 그래프가 다르게 나올 수 있을 것 같다.
+## 3.2) Greedy 방법의 시간복잡도
+
+for문들의 연산횟수를 보면
+
+n x O(m)  + =>O(nm) 의 시간복잡도가 나온다.
+
+## 3.3) Bruteforce 방법의 시간복잡도
+
+for문이 alltaskmachinenum 을 호출하면서 O(m^n) x O(n) 이 나오고
+
+brute force 에서 O(m^n) x {O(n)+O(m)+O(m)} 이 나온다.
+
+지수의 시간복잡도가 나오므로 엄청난 시간이 걸린다.
 
 
 
-### 3.3.4) 실제 데이터 정렬 시간 표이다.
+## p.s.) 근사알고리즘을 짜면서 추가적으로 알게된 것들. 
 
-전체적으로 쉘정렬의 속도가 매우 빨랐다.
-
-예상과 같이 어느정도 
-
-
-
-## p.s.) 쉘 정렬에서 지금까지 알려진 가장 좋은 성능을 보인 간격들
-
-최적격차!
-
-쉘정렬에서의 중요한 문제는 비교된 요소들 사이의 최적의 간격을 결정하는 것이다.
-
-최고의 성능은 Marcin Ciura의  1, 4, 10, 23, 57, 132, 301, 701, 1750 의 시퀀스에 의해 제공된다.
-
-또한 Knuth’s sequence: k = 3k + 1 도 있다.
-
-제가 작성한 코드도 Knuth’s sequence를 이용해서 작성했습니다.
-
-
+1. 
 
 
 

@@ -121,8 +121,8 @@ class JobScheduling {
 
         System.out.print("입력의 개수와 기계대수를 입력하세요>");
         Scanner scanner = new Scanner(System.in);
-        int totaltask = scanner.nextInt();
-        int totalmachine = scanner.nextInt();
+        int totaltask = scanner.nextInt();      //16;넣어서 테스트완료
+        int totalmachine = scanner.nextInt();   //2;넣어서 테스트완료
 
         int task[] = new int[totaltask];
         randomtask(task); //이렇게 하면 task배열의 값들이 모두 랜덤으로 설정된다.
@@ -147,11 +147,25 @@ class JobScheduling {
         System.out.println("");
         System.out.println("bruteforce로 구현시 최종 걸리는 시간은 "+bruteforce(task,machine)+"초 입니다.");
 
+/*      각 경우의 근사도를 알아내는 코드!
+        double sum=0;
+        for(int i = 0; i < 100; i++){
+            for (int j = 0; j < machine.length; j++) {// 한번 루프가 돌았다면 machine에 이전 작업결과들이 남아있을테니 다시 0으로 모두 초기화해준다.
+                machine[j] = 0;
+            }
+            randomtask(task);
+            double greedysol = Greedy(machine,task);
+            double brutesol = bruteforce(task,machine);
+
+            double rate = greedysol / brutesol;
+            sum += rate;
+        }
+
+        System.out.println(sum/100);
 
 
 
-
-
+ */
 
     }
 
