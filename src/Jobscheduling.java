@@ -46,58 +46,74 @@ class JobScheduling {
     }
 
     public static int bruteforce(int[] task, int [] machine){ // 브루트포스 그냥 기계 대수에 나눠서 작업 분배
-        int m = machine.length;
-        int n = task.length;
+        int m = machine.length;     //기계대수
+        int n = task.length;        //작업개수
         int[] taskmachineNum = new int[n];                //각 작업이 실행되는 기계가 몇번 기계인지 저장하는 배열
-        int[] lastarr = new int[(int) Math.pow(m, n)];    //각 경우에서의 마지막 종료 시간을 저장하는 배열
+        int[] fintimearr = new int[(int) Math.pow(m, n)];    //각 경우에서의 마지막 종료 시간을 저장하는 배열
 
 
+        int[][] alltaskmachinenum = alltaskmachineNum(machine,task); // 모든 작업의 경우의 수를 이차원배열에 저장해둔다.
 
         for (int i = 0; i < (int) Math.pow(m, n); i++) {
-            zeromaker(machine); // 한번 루프가 돌았다면 machine에 이전 작업결과들이 남아있을테니 다시 0으로 모두 초기화해준다.
+            for (int j = 0; j < m; j++) {// 한번 루프가 돌았다면 machine에 이전 작업결과들이 남아있을테니 다시 0으로 모두 초기화해준다.
+                machine[j] = 0;
+            }
 
-            for (int k = 0; k < n; k++) { //작업을 기계와 매치시키는 과정
-                int p = taskmachineNum[k];
+            for (int k = 0; k < n; k++) { //작업을 기계에 넣는 과정
+
+                int p = alltaskmachinenum[i][k]; // 작업이 들어갈 기계번호
                 machine[p] += task[k];  // task길이를 기계의 종료시간에 추가연장해준다.
             }
 
-            taskmachineNum[0]++;
-            for (int o = 0; o < n; o++) {    //작업이 들어갈 기계번호를 바꿔주는 과정
-                if (m-1 < taskmachineNum[o]) {
-                    taskmachineNum[o] = 0;
-                    if (o + 1 < n) taskmachineNum[o + 1]++;
-
-                }
-            }
-
-
             for (int l = 0; l < m; l++) {// 각 경우에서 가장 느렸던 종료시간을 lastarr배열에 저장하는 과정
-                if (machine[l] > lastarr[i]) { //만약 더 크면->더 느리면
-                    lastarr[i] = machine[l];  // 그 값을 last arr에 저장
+                if (machine[l] > fintimearr[i]) { //만약 더 크면->더 느리면
+                    fintimearr[i] = machine[l];  // 그 값을 last arr에 저장
                 }
             }
 
         }
 
 
+        int min = 100000;
 
-        int min = 10000;
-        for (int i = 0; i < (int) Math.pow(m, n); i++) {           //모든 경우에서 가장 작은 값 반환
-            if (lastarr[i] < min) {
-                min = lastarr[i];
+        for (int i = 0; i < (int) Math.pow(m, n); i++) { //모든 경우에서 가장 작은 값 반환
+            if (fintimearr[i] < min) {
+                min = fintimearr[i];
             }
         }
+
         return min;
-
-
     }
 
 
-    public static int[] zeromaker(int [] machine) {
-        for (int j = 0; j < machine.length; j++) {
-            machine[j] = 0; // 매 번 돌릴 때마다 기계의 마지막 종료시간을 다시 0으로 초기화 해준다.
+
+    public static int[][] alltaskmachineNum(int[] machine, int[] task) { //기계에 매치될 수 있는 모든 경우의 수를 구하는 함수
+
+        int m = machine.length;
+        int n = task.length;
+
+        int [][] alltaskmachineNum = new int[(int) Math.pow(m, n)][n];
+        int [] tmp = new int[n];
+
+
+        for(int i = 0; i < (int) Math.pow(m, n); i++) {
+            tmp[0]++;
+            for (int k = 0; k < n; k++) {
+                //그 줄의 배열을 alltask에 넣는 함수 추가
+                if (m - 1 < tmp[k]) { //기계의 대수-1 보다 크면 0으로 넣어버린다. 만약 4개의 기계라면
+                    tmp[k] = 0;      //기계번호 0 1 2 3 0 1 2 3 이런 순임.
+                    if (k + 1 < n) tmp[k + 1]++; // 만약 이번 실행이 마지막이 아니라면 그 다음 기계번호매칭에 1을 더해서
+                    // 다음기계에 일을 준다. 마치 진법처럼 그 위에것의 자리수가 올라간다.
+                }
+            }
+
+            for(int j =0; j<n;j++){
+                alltaskmachineNum[i][j] = tmp[j];
+            }
+
         }
-        return machine;
+
+        return alltaskmachineNum;
     }
 
 
@@ -124,13 +140,19 @@ class JobScheduling {
         System.out.println("");
         System.out.println("greedy로 구현시 최종 걸리는 시간은 "+JobScheduling(machine,task)+"초 입니다.");
 
-
        for(int i = 0; i<machine.length;i++){
            machine[i]=0;
        }
 
-
         System.out.println("");
         System.out.println("bruteforce로 구현시 최종 걸리는 시간은 "+bruteforce(task,machine)+"초 입니다.");
+
+
+
+
+
+
+
     }
+
 }
