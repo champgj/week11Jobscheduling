@@ -97,7 +97,7 @@ class JobScheduling {
 
 
         for(int i = 0; i < (int) Math.pow(m, n); i++) {
-            tmp[0]++;
+
             for (int k = 0; k < n; k++) {
                 //그 줄의 배열을 alltask에 넣는 함수 추가
                 if (m - 1 < tmp[k]) { //기계의 대수-1 보다 크면 0으로 넣어버린다. 만약 4개의 기계라면
@@ -110,7 +110,7 @@ class JobScheduling {
             for(int j =0; j<n;j++){
                 alltaskmachineNum[i][j] = tmp[j];
             }
-
+            tmp[0]++;
         }
 
         return alltaskmachineNum;
